@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="registrationApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login and Registration</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-image: url('C:\Users\Admin\Downloads\IMG_20210110_192257_337 (1).jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button[disabled] {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            margin-right: 20px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #4caf50;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+</head>
+
+<body ng-controller="mainController">
+
+    
+    <nav>
+        <img class="logo" src="C:\Users\Admin\Downloads\IMG_20210110_192257_337 (1).jpg" alt="Portal Logo">
+        
+        <a class="nav-link" href="#/login">Login</a>
+        <a class="nav-link" href="#/register">Register</a>
+        
+    </nav>
+
+    <div ng-view></div>
+
+    <script>
+        var app = angular.module('registrationApp', ['ngRoute']);
+
+        app.config(function ($routeProvider) {
+            $routeProvider
+            .when('/login', {
+                    templateUrl: 'login.html',
+                    controller: 'loginController'
+                })
+                
+                .when('/register', {
+                    templateUrl: 'register.html',
+                    controller: 'registrationController'
+                })
+                .otherwise({
+                    redirectTo: '/login'
+                });
+        });
+
+        app.controller('mainController', function ($scope) {
+        });
+
+        app.controller('registrationController', function ($scope, $location) {
+            $scope.user = {};
+
+            $scope.submitForm = function () {
+                console.log('User registered:', $scope.user);
+
+                var data = [{
+                    
+                    'FirstName': $scope.user.firstName,
+                    'LastName': $scope.user.lastName,
+                    'DOB': $scope.user.dob,
+                    'State': $scope.user.state,
+                    'Country': $scope.user.country,
+                    'Age': $scope.user.age
+                }];
+
+                var ws = XLSX.utils.json_to_sheet(data);
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "UserDetails");
+                XLSX.writeFile(wb, 'user_details.xlsx');
+
+                $location.path('/login');
+            };
+        });
+
+        app.controller('loginController', function ($scope,$location) {
+            $scope.loginUser = {};
+
+            $scope.login = function () {    
+                console.log('User logged in:', $scope.loginUser);
+            };
+
+            $scope.openRegistration = function () {
+                $location.path('/register');
+            };
+        });
+    </script>
+</body>
+
+</html>

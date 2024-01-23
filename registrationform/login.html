@@ -1,0 +1,16 @@
+
+<div class="container">
+    <h2>Login Form</h2>
+    <form name="loginForm">
+        <label for="loginUsername">Username:</label>
+        <input type="text" id="loginUsername" ng-model="loginUser.username" required>
+
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" ng-model="loginUser.email" required>
+
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" ng-model="loginUser.password" required>
+
+        <button type="button" ng-click="openRegistration()">Login & Register</button>
+    </form>
+</div>
